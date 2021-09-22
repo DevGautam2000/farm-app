@@ -1,6 +1,13 @@
 import 'dart:ffi';
 
+import 'package:chakras_farm/models/farm_data.dart';
+import 'package:chakras_farm/screens/farm_profile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import 'login.dart';
 
 class Farms extends StatefulWidget {
   const Farms({Key? key}) : super(key: key);
@@ -14,35 +21,79 @@ class _FarmsState extends State<Farms> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      body: SafeArea(
-        child: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) => GestureDetector(
-                  onTap: () {
-                    print("$index was tapped");
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Container(
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        backgroundColor: Colors.grey.shade200,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(15.0),
+            child: ListView.builder(
+                itemCount: farms.length,
+                itemBuilder: (context, index) {
+                  var farm = farms[index];
+                  return Container(
                       margin: EdgeInsets.all(10),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
                       decoration: BoxDecoration(
                           color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
                                 blurRadius: 25.0,
-                                color: Colors.grey.shade300,
+                                color: Colors.grey.shade400,
                                 offset: Offset(2.0, 10.0))
                           ]),
-                      height: size.height * .2,
-                      child: Text("i am chold"),
-                    ),
-                  ),
-                )),
+                      height: size.height * .15,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(20),
+                          onTap: () => Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (_) => FarmProfile(
+                                        farm: farm,
+                                      ))),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 15),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Text(
+                                  farm.name,
+                                  style: TextStyle(fontSize: 18),
+                                )),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: farm.color.withOpacity(.35),
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 5.0,
+                                            color: Colors.grey.shade300,
+                                            offset: Offset(2.0, 6.0))
+                                      ]),
+                                  child: SvgPicture.asset(
+                                    farm.logo,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ));
+                }),
+          ),
+        ),
       ),
     );
   }

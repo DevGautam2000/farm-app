@@ -1,6 +1,9 @@
+import 'package:chakras_farm/screens/farms.dart';
 import 'package:chakras_farm/screens/login.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:page_transition/page_transition.dart';
 
 class Splash extends StatelessWidget {
   const Splash({Key? key}) : super(key: key);
@@ -22,7 +25,7 @@ class Splash extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     "assets/svgs/splash_icon.svg",
-                    width: size.width,
+                    fit: BoxFit.contain,
                   )
                 ],
               ),
@@ -39,7 +42,9 @@ class Splash extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () => Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => Login())),
+                    context,
+                    CupertinoPageRoute(
+                        settings: RouteSettings(), builder: (_) => Farms())),
                 child: Text(
                   "Get Started",
                   style: TextStyle(color: Colors.white, fontSize: 18),
