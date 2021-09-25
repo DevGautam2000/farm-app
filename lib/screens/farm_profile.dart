@@ -1,58 +1,227 @@
-import 'package:chakras_farm/helper/drawer_nav.dart';
 import 'package:chakras_farm/models/farm_data.dart';
-import 'package:chakras_farm/widgets/bottom_nav.dart';
+import 'package:chakras_farm/models/user_profile.dart';
+import 'package:chakras_farm/widgets/hero_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/widgets.dart';
+import 'farm_stats.dart';
 
 class FarmProfile extends StatefulWidget {
   final Farm farm;
 
-  const FarmProfile({Key? key, required this.farm}) : super(key: key);
+  const FarmProfile({
+    Key? key,
+    required this.farm,
+  }) : super(key: key);
 
   @override
   _FarmProfileState createState() => _FarmProfileState();
 }
 
 class _FarmProfileState extends State<FarmProfile> {
-  int _selectedIndex = 0;
+  var user = UserProfile("", "Pranay Kumar", "ceo@thechakrasfarm.com");
+
+  List<String> fields = [
+    "Owner: ",
+    "Name: ",
+    "Estimated Time Left: ",
+    "Age: ",
+    "Health: ",
+  ];
+
+  int _luminence = 70;
+  int _moisture = 50;
+  int _temperature = 50;
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var horizontalMargin = 20.0;
     return Scaffold(
         appBar: AppBar(
           brightness: Brightness.dark,
-          backgroundColor: widget.farm.color,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.notifications_none_outlined),
-              onPressed: () => {},
-            ),
-          ],
-          // leading: IconButton(
-          //   icon: Icon(Icons.sort),
-          //   onPressed: () => {},
-          // ),
-          elevation: 0,
-        ),
-        drawer: DrawerNav(farm: widget.farm),
-        body: Container(
-          child: SvgPicture.asset(widget.farm.logo),
-        ),
-        bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.shade400,
-                    blurRadius: 10,
-                    offset: Offset(0, 2)),
+          backgroundColor: Colors.white,
+          centerTitle: false,
+          iconTheme: IconThemeData(color: Colors.black),
+          automaticallyImplyLeading: false,
+          titleSpacing: 0,
+          title: Padding(
+            padding: EdgeInsets.symmetric(horizontal: horizontalMargin - 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Builder(
+                  builder: (_) => IconButton(
+                    icon: Icon(
+                      Icons.sort,
+                      size: 30,
+                    ),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.notifications_none_outlined,
+                    size: 30,
+                  ),
+                  onPressed: () => {},
+                ),
               ],
             ),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(60),
-                child: BottomNavigator(_selectedIndex, widget.farm))));
+          ),
+          elevation: 0,
+        ),
+        body: SafeArea(
+          child: ListView(children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: horizontalMargin, vertical: 10),
+                  child: Text(
+                    "Farm details",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+                HeroContainer(
+                    size: size,
+                    horizontalMargin: horizontalMargin,
+                    widget: widget,
+                    fields: fields),
+
+                //control panel data
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: horizontalMargin, vertical: 20),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          buildControlPanelData(size, Colors.yellow,
+                              "Luminence", _luminence.toString(), "light-bulb"),
+                          buildControlPanelData(size, Colors.lightBlueAccent,
+                              "Moisture", _moisture.toString(), "water-drop"),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          buildControlPanelData(
+                              size,
+                              Colors.redAccent,
+                              "Temperature",
+                              _temperature.toString(),
+                              "thermometer"),
+                          Container(
+                            height: 120,
+                            width: size.width * .4,
+                            child: Material(
+                              color: Colors.transparent,
+                              shape: CircleBorder(),
+                              clipBehavior: Clip.hardEdge,
+                              child: IconButton(
+                                splashColor: Colors.white,
+                                iconSize: 40,
+                                icon: Icon(CupertinoIcons.forward),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (_) => FarmStats(
+                                                farm: widget.farm,
+                                              )));
+                                },
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey.shade300),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ]),
+        ));
+  }
+
+  Widget buildControlPanelData(size, Color color, text, data, asset) {
+    return Container(
+      height: 180,
+      width: size.width * .4,
+      child: Stack(children: [
+        Positioned(
+          bottom: 0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              width: size.width * .4,
+              height: 130,
+              decoration: BoxDecoration(
+                color: color.withOpacity(.35),
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 70,
+                    left: 8,
+                    child: Text(
+                      text,
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      width: size.width * .4,
+                      height: 30,
+                      color: color.withOpacity(.3),
+                      child: Stack(children: [
+                        Positioned(
+                          right: 0,
+                          child: Container(
+                              width: 40,
+                              height: 30,
+                              color: color,
+                              child: Center(
+                                  child: Text(
+                                data,
+                                style: TextStyle(fontSize: 17),
+                              ))),
+                        ),
+                      ]),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 0,
+          child: Container(
+            width: size.width * .4,
+            child: Image.asset(
+              "assets/images/$asset.png",
+              width: 100,
+              height: 100,
+              scale: .95,
+            ),
+          ),
+        )
+      ]),
+    );
   }
 }

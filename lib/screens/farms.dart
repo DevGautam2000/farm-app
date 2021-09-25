@@ -1,13 +1,11 @@
 import 'dart:ffi';
 
+import 'package:chakras_farm/helper/main_bottom_navigator.dart';
 import 'package:chakras_farm/models/farm_data.dart';
-import 'package:chakras_farm/screens/farm_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'login.dart';
 
 class Farms extends StatefulWidget {
   const Farms({Key? key}) : super(key: key);
@@ -25,6 +23,11 @@ class _FarmsState extends State<Farms> {
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: false,
+          title: Text(
+            "Farms",
+            style: TextStyle(color: Colors.black),
+          ),
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
@@ -58,7 +61,7 @@ class _FarmsState extends State<Farms> {
                           onTap: () => Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                  builder: (_) => FarmProfile(
+                                  builder: (_) => MainBottomNavigator(
                                         farm: farm,
                                       ))),
                           child: Padding(
@@ -72,6 +75,9 @@ class _FarmsState extends State<Farms> {
                                   style: TextStyle(fontSize: 18),
                                 )),
                                 Container(
+                                  height: 100,
+                                  width: 100,
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
                                   decoration: BoxDecoration(
                                       color: farm.color.withOpacity(.35),
                                       borderRadius: BorderRadius.circular(20),
@@ -83,7 +89,6 @@ class _FarmsState extends State<Farms> {
                                       ]),
                                   child: SvgPicture.asset(
                                     farm.logo,
-                                    fit: BoxFit.cover,
                                   ),
                                 )
                               ],
