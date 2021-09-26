@@ -12,8 +12,8 @@ class Farm {
 const preFilePath = "assets/svgs";
 
 List<Farm> farms = [
-  Farm("Tomato farm", "$preFilePath/strawberry.svg", Colors.red),
+  Farm("Tomato farm", "$preFilePath/tomato.svg", Colors.red),
   Farm("Watermelon farm", "$preFilePath/tomato.svg", Colors.green),
-  Farm("Eggplant farm", "$preFilePath/strawberry.svg", Colors.purple),
+  Farm("Eggplant farm", "$preFilePath/tomato.svg", Colors.purple),
   Farm("Orange farm", "$preFilePath/tomato.svg", Colors.orange),
 ];

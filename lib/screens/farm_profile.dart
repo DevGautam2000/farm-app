@@ -39,7 +39,7 @@ class _FarmProfileState extends State<FarmProfile> {
     var horizontalMargin = 20.0;
     return Scaffold(
         appBar: AppBar(
-          brightness: Brightness.dark,
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           centerTitle: false,
           iconTheme: IconThemeData(color: Colors.black),

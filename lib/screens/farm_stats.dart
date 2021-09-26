@@ -14,16 +14,14 @@ class FarmStats extends StatefulWidget {
 }
 
 class _FarmStatsState extends State<FarmStats> {
-  int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var horizontalMargin = 20.0;
     var radiusOfContainer = 34.0;
-    var height = size.height * .4;
+
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle.dark,
+      value: SystemUiOverlayStyle.light,
       child: Scaffold(
         body: Column(
           children: [

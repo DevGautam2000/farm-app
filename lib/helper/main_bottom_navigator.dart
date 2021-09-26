@@ -1,8 +1,8 @@
 import 'package:chakras_farm/fragments/config_profile.dart';
+import 'package:chakras_farm/fragments/user_profile.dart';
 import 'package:chakras_farm/helper/drawer_nav.dart';
 import 'package:chakras_farm/models/farm_data.dart';
 import 'package:chakras_farm/screens/farm_profile.dart';
-import 'package:chakras_farm/screens/login.dart';
 import 'package:chakras_farm/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +30,15 @@ class _MainBottomNavigatorState extends State<MainBottomNavigator> {
   Widget build(BuildContext context) {
     Widget getFragment(index) {
       switch (index) {
+        case 0:
+          return FarmProfile(farm: widget.farm);
         case 1:
           return ConfigProfile(farm: widget.farm);
         case 3:
-          return Scaffold();
+          return UserProfile(farm: widget.farm);
       }
 
-      return FarmProfile(farm: widget.farm);
+      return Scaffold();
     }
 
     return Scaffold(

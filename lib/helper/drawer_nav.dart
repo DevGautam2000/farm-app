@@ -15,7 +15,6 @@ class DrawerNav extends StatefulWidget {
 class _DrawerNavState extends State<DrawerNav> {
   @override
   Widget build(BuildContext context) {
-    var user = UserProfile("", "Pranay Kumar", "ceo@thechakrasfarm.com");
     return Drawer(
       child: ListView(
         children: [
