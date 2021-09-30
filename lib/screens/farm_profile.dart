@@ -1,19 +1,14 @@
 import 'package:chakras_farm/models/farm_data.dart';
 import 'package:chakras_farm/models/user_profile.dart';
+import 'package:chakras_farm/providers/farm_provider.dart';
 import 'package:chakras_farm/widgets/hero_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'farm_stats.dart';
+import 'package:provider/provider.dart';
 
 class FarmProfile extends StatefulWidget {
-  final Farm farm;
-
-  const FarmProfile({
-    Key? key,
-    required this.farm,
-  }) : super(key: key);
-
   @override
   _FarmProfileState createState() => _FarmProfileState();
 }
@@ -29,14 +24,20 @@ class _FarmProfileState extends State<FarmProfile> {
     "Health: ",
   ];
 
-  int _luminence = 70;
-  int _moisture = 50;
-  int _temperature = 50;
+  int _luminance = 0;
+  int _moisture = 0;
+  int _temperature = 0;
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var horizontalMargin = 20.0;
+
+    Farm farm = context.read<FarmProvider>().farm;
+    this._temperature = farm.temperature;
+    this._moisture = farm.moisture;
+    this._luminance = farm.luminance;
+
     return Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,
@@ -90,7 +91,6 @@ class _FarmProfileState extends State<FarmProfile> {
                 HeroContainer(
                     size: size,
                     horizontalMargin: horizontalMargin,
-                    widget: widget,
                     fields: fields),
 
                 //control panel data
@@ -103,7 +103,7 @@ class _FarmProfileState extends State<FarmProfile> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           buildControlPanelData(size, Colors.yellow,
-                              "Luminence", _luminence.toString(), "light-bulb"),
+                              "Luminence", _luminance.toString(), "light-bulb"),
                           buildControlPanelData(size, Colors.lightBlueAccent,
                               "Moisture", _moisture.toString(), "water-drop"),
                         ],
@@ -137,7 +137,7 @@ class _FarmProfileState extends State<FarmProfile> {
                                       context,
                                       CupertinoPageRoute(
                                           builder: (_) => FarmStats(
-                                                farm: widget.farm,
+                                                farm: farm,
                                               )));
                                 },
                               ),

@@ -26,77 +26,92 @@ class _FarmStatsState extends State<FarmStats> {
         body: Column(
           children: [
             Expanded(
-              child: Container(
-                height: size.height,
-                child: Stack(
-                  children: [
-                    Container(
-                      height: size.height * .3,
-                      width: size.width,
-                      decoration: BoxDecoration(
-                        color: widget.farm.color.withOpacity(.3),
-                      ),
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: horizontalMargin),
-                        child: Container(
-                          width: size.width,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                  top: size.height * .07,
-                                  child: Material(
-                                    shape: CircleBorder(),
-                                    clipBehavior: Clip.hardEdge,
-                                    color: Colors.transparent,
-                                    child: IconButton(
-                                      splashColor: Colors.white,
-                                      iconSize: 30,
-                                      icon: Icon(CupertinoIcons.back),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                  )),
-                              Positioned(
-                                top: 50,
-                                child: Container(
-                                  width: size.width,
-                                  child: Container(
-                                      child: SvgPicture.asset(
-                                    widget.farm.logo,
-                                    height: 150,
-                                    width: 100,
-                                    fit: BoxFit.contain,
-                                  )),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: size.height * .25,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(radiusOfContainer),
-                            topRight: Radius.circular(radiusOfContainer)),
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: horizontalMargin,
-                            ),
-                            width: size.width,
-                            height: size.height,
-                            decoration: BoxDecoration(color: Colors.white),
-                            child: ListView(children: [
-                              buildPadding(),
-                            ])),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              child: buildContainer(
+                  size, horizontalMargin, context, radiusOfContainer),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Container buildContainer(Size size, double horizontalMargin,
+      BuildContext context, double radiusOfContainer) {
+    return Container(
+      height: size.height,
+      child: Stack(
+        children: [
+          buildHeroContainer(size, horizontalMargin, context),
+          Positioned(
+            top: size.height * .25,
+            child: buildMainArea(radiusOfContainer, horizontalMargin, size),
+          )
+        ],
+      ),
+    );
+  }
+
+  ClipRRect buildMainArea(
+      double radiusOfContainer, double horizontalMargin, Size size) {
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(radiusOfContainer),
+          topRight: Radius.circular(radiusOfContainer)),
+      child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalMargin,
+          ),
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(color: Colors.white),
+          child: ListView(children: [
+            buildPadding(),
+          ])),
+    );
+  }
+
+  Container buildHeroContainer(
+      Size size, double horizontalMargin, BuildContext context) {
+    return Container(
+      height: size.height * .3,
+      width: size.width,
+      decoration: BoxDecoration(
+        color: widget.farm.color.withOpacity(.3),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: horizontalMargin),
+        child: Container(
+          width: size.width,
+          child: Stack(
+            children: [
+              Positioned(
+                  top: size.height * .07,
+                  child: Material(
+                    shape: CircleBorder(),
+                    clipBehavior: Clip.hardEdge,
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashColor: Colors.white,
+                      iconSize: 30,
+                      icon: Icon(CupertinoIcons.back),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  )),
+              Positioned(
+                top: 50,
+                child: Container(
+                  width: size.width,
+                  child: Container(
+                      child: SvgPicture.asset(
+                    widget.farm.logo,
+                    height: 150,
+                    width: 100,
+                    fit: BoxFit.contain,
+                  )),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

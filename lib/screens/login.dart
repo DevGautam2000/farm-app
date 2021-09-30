@@ -12,61 +12,64 @@ class Login extends StatelessWidget {
         child: ListView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 60),
-            child: Container(
-              height: size.height * .8,
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        buildColumn("Username", "Please enter your username.", context),
-                        SizedBox(
-                          height: 50,
-                        ),
-                        buildColumn("Password", "Please enter your password.", context),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "Forgot Password?",
-                                style: buildTextStyle(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Column(
-                      children: [
-                        buildElevatedButton(
-                            size, "Sign In", Color(0xff93D7AB), Colors.black),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "or",
-                          style: buildTextStyle(),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        buildElevatedButton(size, "Sign in with Google",
-                            Theme.of(context).primaryColor, Colors.white),
-                      ],
-                    )
-                  ],
-                ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 60),
+                child: buildContainer(size, context),
               ),
+            ]),
+      ),
+    );
+  }
+
+  Container buildContainer(Size size, BuildContext context) {
+    return Container(
+      height: size.height * .8,
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              children: [
+                buildColumn("Username", "Please enter your username.", context),
+                SizedBox(
+                  height: 50,
+                ),
+                buildColumn("Password", "Please enter your password.", context),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Forgot Password?",
+                        style: buildTextStyle(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
-        ]),
+            Column(
+              children: [
+                buildElevatedButton(
+                    size, "Sign In", Color(0xff93D7AB), Colors.black),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "or",
+                  style: buildTextStyle(),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                buildElevatedButton(size, "Sign in with Google",
+                    Theme.of(context).primaryColor, Colors.white),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -96,7 +99,6 @@ class Login extends StatelessWidget {
   }
 
   Column buildColumn(text, validationText, context) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,7 +110,6 @@ class Login extends StatelessWidget {
         TextFormField(
           decoration: InputDecoration(
             hintText: 'Enter your ${text.toString().toLowerCase()}',
-
             border: buildOutlineInputBorder(context),
             focusedBorder: buildOutlineInputBorder(context),
           ),

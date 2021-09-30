@@ -1,25 +1,28 @@
-import 'package:chakras_farm/models/farm_data.dart';
+import 'package:chakras_farm/providers/farm_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ConfigProfile extends StatefulWidget {
-  final Farm farm;
-
-  const ConfigProfile({Key? key, required this.farm}) : super(key: key);
-
   @override
   _ConfigProfileState createState() => _ConfigProfileState();
 }
 
 class _ConfigProfileState extends State<ConfigProfile> {
-  int _luminance = 75;
-  int _moisture = 26;
-  int _temperature = 13;
+  int _luminance = 0;
+  int _moisture = 0;
+  int _temperature = 0;
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var horizontalMargin = 20.0;
+
+    // var watcher = context.watch<ConfigProvider>();
+    var watcher = context.watch<FarmProvider>();
+
+    // initVars(watcher);
+    initVars(watcher);
 
     return Scaffold(
       appBar: AppBar(
@@ -37,19 +40,35 @@ class _ConfigProfileState extends State<ConfigProfile> {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         ),
-        child: ListView(
-          children: [
-            buildContainer(horizontalMargin, size, "Luminance", _luminance),
-            buildContainer(horizontalMargin, size, "Moisture", _moisture),
-            buildContainer(horizontalMargin, size, "Temperature", _temperature),
-          ],
-        ),
+        child: buildListView(horizontalMargin, size, watcher),
       )),
     );
   }
 
+  ListView buildListView(
+      double horizontalMargin, Size size, FarmProvider watcher) {
+    return ListView(
+      children: [
+        buildContainer(
+            horizontalMargin, size, "Luminance", _luminance, watcher),
+        buildContainer(horizontalMargin, size, "Moisture", _moisture, watcher),
+        buildContainer(
+            horizontalMargin, size, "Temperature", _temperature, watcher),
+      ],
+    );
+  }
+
+  void initVars(FarmProvider watcher) {
+    // this._luminance = watcher.luminance;
+    // this._moisture = watcher.moisture;
+    // this._temperature = watcher.temperature;
+    this._luminance = watcher.farm.luminance;
+    this._moisture = watcher.farm.moisture;
+    this._temperature = watcher.farm.temperature;
+  }
+
   Container buildContainer(
-      double horizontalMargin, Size size, text, passedSliderValue) {
+      double horizontalMargin, Size size, text, passedSliderValue, watcher) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: horizontalMargin, vertical: 10),
       decoration: BoxDecoration(boxShadow: [
@@ -61,7 +80,7 @@ class _ConfigProfileState extends State<ConfigProfile> {
       ], color: Colors.white, borderRadius: BorderRadius.circular(20)),
       child: Container(
         padding: EdgeInsets.all(horizontalMargin),
-        height: size.height * .26,
+        height: 250,
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(20)),
         child: Column(
@@ -78,7 +97,7 @@ class _ConfigProfileState extends State<ConfigProfile> {
             Flexible(
               child: Container(
                 padding: EdgeInsets.all(horizontalMargin - 10),
-                height: size.height * .180,
+                height: 180,
                 decoration: BoxDecoration(
                     color: Color(0xffC2D7C1),
                     borderRadius: BorderRadius.circular(10)),
@@ -105,7 +124,7 @@ class _ConfigProfileState extends State<ConfigProfile> {
                               clipBehavior: Clip.hardEdge,
                               child: IconButton(
                                   onPressed: () {
-                                    setStateOfSliderVariable(text, 30);
+                                    setStateOfSliderVariable(text, 30, watcher);
                                   },
                                   padding: EdgeInsets.zero,
                                   iconSize: 30,
@@ -144,9 +163,9 @@ class _ConfigProfileState extends State<ConfigProfile> {
                               child: IconButton(
                                   iconSize: 30,
                                   onPressed: () {
-                                    setState(() {
-                                      setStateOfSliderVariable(text, 0);
-                                    });
+                                    // setState(() {
+                                    //   setStateOfSliderVariable(text, );
+                                    // });
                                   },
                                   icon: Container(
                                     decoration: BoxDecoration(
@@ -184,7 +203,8 @@ class _ConfigProfileState extends State<ConfigProfile> {
                             max: 100,
                             divisions: null,
                             onChanged: (double value) {
-                              setStateOfSliderVariable(text, value.toInt());
+                              setStateOfSliderVariable(
+                                  text, value.toInt(), watcher);
                             },
                           ),
                         )
@@ -200,21 +220,24 @@ class _ConfigProfileState extends State<ConfigProfile> {
     );
   }
 
-  void setStateOfSliderVariable(text, val) {
+  void setStateOfSliderVariable(text, val, watcher) {
     switch (text.toString().toLowerCase()) {
       case "luminance":
         setState(() {
           this._luminance = val;
+          watcher.farm.luminance = val;
         });
         break;
       case "temperature":
         setState(() {
           this._temperature = val;
+          watcher.farm.temperature = val;
         });
         break;
       case "moisture":
         setState(() {
           this._moisture = val;
+          watcher.farm.moisture = val;
         });
         break;
     }

@@ -1,12 +1,10 @@
 import 'package:chakras_farm/models/farm_data.dart';
 import 'package:chakras_farm/models/user_profile.dart';
+import 'package:chakras_farm/providers/farm_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserProfile extends StatefulWidget {
-  final Farm farm;
-
-  const UserProfile({Key? key, required this.farm}) : super(key: key);
-
   @override
   _UserProfileState createState() => _UserProfileState();
 }
@@ -14,6 +12,8 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
+    Farm farm = context.read<FarmProvider>().farm;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -33,7 +33,7 @@ class _UserProfileState extends State<UserProfile> {
                   CircleAvatar(
                     radius: 50,
                     foregroundColor: Colors.white,
-                    backgroundColor: widget.farm.color,
+                    backgroundColor: farm.color,
                     child: user.image.isNotEmpty
                         ? Image(image: NetworkImage(""))
                         : Text(
@@ -46,8 +46,7 @@ class _UserProfileState extends State<UserProfile> {
                     children: [
                       Text(
                         user.name,
-                        style:
-                            TextStyle(color: widget.farm.color, fontSize: 20),
+                        style: TextStyle(color: farm.color, fontSize: 20),
                       ),
                       Text(
                         user.email,

@@ -2,16 +2,13 @@ import 'package:chakras_farm/fragments/config_profile.dart';
 import 'package:chakras_farm/fragments/user_profile.dart';
 import 'package:chakras_farm/helper/drawer_nav.dart';
 import 'package:chakras_farm/models/farm_data.dart';
+import 'package:chakras_farm/providers/farm_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:chakras_farm/screens/farm_profile.dart';
-import 'package:chakras_farm/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainBottomNavigator extends StatefulWidget {
-  final Farm farm;
-
-  const MainBottomNavigator({Key? key, required this.farm}) : super(key: key);
-
   @override
   _MainBottomNavigatorState createState() => _MainBottomNavigatorState();
 }
@@ -22,27 +19,32 @@ class _MainBottomNavigatorState extends State<MainBottomNavigator> {
   void _onTap(index) {
     setState(() => _selectedIndex = index);
     if (index == 2)
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (_) => Splash()), (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, "/", (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
+    Map? args = ModalRoute.of(context)!.settings.arguments as Map?;
+    Farm farm = args!['farm'];
+
+    //state lifted to main parent
+    context.watch<FarmProvider>().farm = farm;
+
     Widget getFragment(index) {
       switch (index) {
         case 0:
-          return FarmProfile(farm: widget.farm);
+          return FarmProfile();
         case 1:
-          return ConfigProfile(farm: widget.farm);
+          return ConfigProfile();
         case 3:
-          return UserProfile(farm: widget.farm);
+          return UserProfile();
       }
 
       return Scaffold();
     }
 
     return Scaffold(
-      drawer: DrawerNav(farm: widget.farm),
+      drawer: DrawerNav(farm: farm),
       body: getFragment(_selectedIndex),
       bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -60,7 +62,7 @@ class _MainBottomNavigatorState extends State<MainBottomNavigator> {
               borderRadius: BorderRadius.circular(60),
               child: BottomNavigationBar(
                   type: BottomNavigationBarType.fixed,
-                  selectedItemColor: widget.farm.color,
+                  selectedItemColor: farm.color,
                   currentIndex: _selectedIndex,
                   iconSize: 30.0,
                   onTap: _onTap,
